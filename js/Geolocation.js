@@ -25,12 +25,24 @@ export default {
     return new Promise((resolve, reject) => {
       try {
         _module.geocode(city, addr);
-      }
-      catch (e) {
+      } catch (e) {
         reject(e);
         return;
       }
       DeviceEventEmitter.once('onGetGeoCodeResult', resp => {
+        resolve(resp);
+      });
+    });
+  },
+  searchPOI(city, name) {
+    return new Promise((resolve, reject) => {
+      try {
+        _module.searchPOI(city, name);
+      } catch (e) {
+        reject(e);
+        return;
+      }
+      DeviceEventEmitter.once('onGetReverseGeoCodeResult', resp => {
         resolve(resp);
       });
     });
@@ -42,8 +54,7 @@ export default {
     return new Promise((resolve, reject) => {
       try {
         _module.reverseGeoCode(lat, lng);
-      }
-      catch (e) {
+      } catch (e) {
         reject(e);
         return;
       }
@@ -56,8 +67,7 @@ export default {
     return new Promise((resolve, reject) => {
       try {
         _module.reverseGeoCodeGPS(lat, lng);
-      }
-      catch (e) {
+      } catch (e) {
         reject(e);
         return;
       }
@@ -74,8 +84,7 @@ export default {
         navigator.geolocation.getCurrentPosition((position) => {
           try {
             _module.reverseGeoCodeGPS(position.coords.latitude, position.coords.longitude);
-          }
-          catch (e) {
+          } catch (e) {
             reject(e);
             return;
           }
@@ -96,8 +105,7 @@ export default {
     return new Promise((resolve, reject) => {
       try {
         _module.getCurrentPosition();
-      }
-      catch (e) {
+      } catch (e) {
         reject(e);
         return;
       }
