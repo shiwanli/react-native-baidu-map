@@ -42,7 +42,7 @@ export default {
         reject(e);
         return;
       }
-      DeviceEventEmitter.once('onGetReverseGeoCodeResult', resp => {
+      DeviceEventEmitter.once('onSearchPOIResult', resp => {
         resolve(resp);
       });
     });

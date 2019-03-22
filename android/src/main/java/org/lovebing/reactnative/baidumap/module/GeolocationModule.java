@@ -37,7 +37,7 @@ import java.util.List;
  * Created by lovebing on 2016/10/28.
  */
 public class GeolocationModule extends BaseModule
-        implements BDLocationListener, OnGetGeoCoderResultListener {
+        implements BDLocationListener, OnGetGeoCoderResultListener,OnGetPoiSearchResultListener {
 
     private LocationClient locationClient;
     private static GeoCoder geoCoder;
@@ -194,4 +194,39 @@ public class GeolocationModule extends BaseModule
         }
         sendEvent("onGetReverseGeoCodeResult", params);
     }
+
+    @Override
+    public void onGetPoiResult(PoiResult poiResult) {
+        WritableMap params = Arguments.createMap();
+        if (poiResult == null || poiResult.error != SearchResult.ERRORNO.NO_ERROR) {
+            params.putInt("errcode", -1);
+        }
+        else {
+
+            WritableArray list = Arguments.createArray();
+            List<PoiInfo> poiList = poiResult.getAllPoi();
+            for (PoiInfo info: poiList) {
+                WritableMap attr = Arguments.createMap();
+                attr.putString("name", info.name);
+                attr.putString("address", info.address);
+                attr.putString("city", info.city);
+                attr.putDouble("latitude", info.location.latitude);
+                attr.putDouble("longitude", info.location.longitude);
+                list.pushMap(attr);
+            }
+            params.putArray("poiList", list);
+        }
+        sendEvent("onGetReverseGeoCodeResult", params);
+    }
+
+    @Override
+    public void onGetPoiDetailResult(PoiDetailResult poiDetailResult) {
+
+    }
+
+    @Override
+    public void onGetPoiIndoorResult(PoiIndoorResult poiIndoorResult) {
+
+    }
+
 }
